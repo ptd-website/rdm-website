@@ -2,7 +2,7 @@
 
 ## mBiS-1
 
-*Post as: Reply to Reviewer mBiS's review. 4,135 / 5,000 characters.*
+*Post as: Reply to Reviewer mBiS's review. 4,176 / 5,000 characters.*
 
 **Title:** Response to Reviewer mBiS (1/3): redundancy, family-level holdouts, blinded comparisons, tuning, real floor
 
@@ -20,7 +20,7 @@ Thank you for a careful review with concrete tests. We ran each of them; this pa
 | Barlow Twins | 1.36 | **0.84** | 1.79 |
 | MoCo-v3 (contrastive) | 1.31 | **0.90** | 1.93 |
 
-**iRDM improves on its initialization on the two most disjoint encoders** (I-JEPA and SAM, maximum CKA 0.22). On SwAV, Barlow Twins and MoCo-v3 FD-SIM is closer, even below real data: these encoders track Inception statistics, which FD-SIM matches directly (FID 0.75 against iRDM's 2.38). Matching them buys no perceptual quality: FD-Inception, trained on the Inception distance alone, moves Barlow and MoCo by −32% and −36%, yet none of the three preference models prefers it to its own base. A controlled ablation (3 seeds per arm) **traces the split to our gated controller**, which stops pushing an encoder once it reaches the real level: uniform weighting pushes the Inception-like encoders further below real, while gating cuts the worst encoder, PE-Core, from 5.06 to 3.39 (uniform 4.75) and is preferred by PickScore, HPSv2.1 and ImageReward in every seed (62.5%, 61.7% and 56.5% of 30,000 pairs).
+**iRDM improves on its initialization on the two most disjoint encoders** (I-JEPA and SAM, maximum CKA 0.45 and 0.22). On SwAV, Barlow Twins and MoCo-v3 FD-SIM is closer, even below real data: these encoders track Inception statistics, which FD-SIM matches directly (FID 0.75 against iRDM's 2.38). Matching them buys no perceptual quality: FD-Inception, trained on the Inception distance alone, moves Barlow and MoCo by −32% and −36%, yet the three preference models rate it at chance or below against its own base. A controlled ablation (3 seeds per arm) **traces the split to our gated controller**, which stops pushing an encoder once it reaches the real level: uniform weighting pushes the Inception-like encoders further below real, while gating cuts the worst encoder, PE-Core, from 5.06 to 3.38 (uniform 4.75) and is preferred by PickScore, HPSv2.1 and ImageReward in every seed (62.5%, 61.7% and 56.5% of 30,000 pairs).
 
 **Q1c. Blinded comparisons.** **Two tests outside our pipeline favour iRDM over FD-SIM.** First, three learned human-preference models, none used in our ImageNet training, on 10,000 matched-noise pairs (same noise and class):
 
@@ -33,7 +33,7 @@ Second, a blinded two-alternative forced choice by GPT-6-Astra, a fixed frontier
 
 **Q1d. Were held-out metrics used for tuning or checkpoint selection?** **No.** The bandwidth (0.7× median) and the final step were selected with SW on the ten training encoders only. The four held-out encoders were never consulted, and the five new encoders were added for this response.
 
-**Q4. "Real floor" and uncertainty.** Eq. (5) sets independent real data to 1. A sample closer to the training bank than independent real data can score below 1, as FD-SIM does on the three SSL encoders above, so the revised paper will call it the "real-data reference level". A joint bootstrap over generated samples, real banks and projections moves SW₍r14₎ by 0.03 for iRDM and 0.05 for FD-SIM (one standard deviation), small against the 0.81 gap between them, **which iRDM wins in every replicate**. Across 3 training seeds, SW₍r14₎ varies by 0.04 or less.
+**Q4. "Real floor" and uncertainty.** Eq. (5) sets independent real data to 1. A sample closer to the training bank than independent real data can score below 1, as FD-SIM does on the three SSL encoders above, so the revised paper will call it the "real-data reference level". A joint bootstrap over generated samples, real banks and projections moves SW₍r14₎ by 0.03 for iRDM and 0.05 for FD-SIM (one standard deviation), small against the 0.81 gap between them, **which iRDM wins in every replicate**. Across 3 training seeds, the standard deviation of SW₍r14₎ is 0.04 or less.
 
 **Revision.** In the abstract and §3.3 we will describe SW₍r14₎ as a different discrepancy, checked on held-out and family-disjoint encoders, three preference models and GPT-6-Astra, and §4.1 will report where the encoders split.
 
@@ -41,7 +41,7 @@ Second, a blinded two-alternative forced choice by GPT-6-Astra, a fixed frontier
 
 ## mBiS-2
 
-*Post as: Reply to Reviewer mBiS's review (after mBiS-1). 3,897 / 5,000 characters.*
+*Post as: Reply to Reviewer mBiS's review (after mBiS-1). 3,909 / 5,000 characters.*
 
 **Title:** Response to Reviewer mBiS (2/3): unseen prompts, separate curation ablations, PickScore dependence
 
@@ -63,7 +63,7 @@ Second, a blinded two-alternative forced choice by GPT-6-Astra, a fixed frontier
 * Separately: **detector filtering is worth 2.8 points on the official prompts and 2.4 on the unseen ones, and PickScore selection 2.3 on both**.
 * The verified GenEval renders add 2.1 official and 2.0 unseen points under the detector. Qwen2.5-VL sees +0.7 on unseen prompts and no gain on the official ones, whose verified renders are in the reference; that part of the detector's credit is detector-specific, as you suspected, and the revised paper will say so.
 
-*Reproduction and checkpoint choice.* **One re-run reproduces the released checkpoint at step 180** (0.818 vs 0.830 official, 0.780 vs 0.780 unseen); the other lands about 3 points lower. The abstract will report the mean of the two runs (0.802) next to the released 0.826. **The released checkpoint was chosen by the training MMD**, which is lowest at step 180 in both runs; GenEval peaks at step 20 or 40 instead, so selecting by GenEval would have picked an early checkpoint ([plot](https://ptd-website.github.io/rdm-website/#selection)).
+*Reproduction and checkpoint choice.* **One re-run reproduces the released checkpoint at step 180** (0.818 vs 0.830 official, 0.780 vs 0.780 unseen); the other lands about 3 points lower. The abstract will report the mean of the two runs (0.802) next to the released 0.826. **The released checkpoint was chosen by the training MMD**, which keeps decreasing through step 180 in both runs; GenEval peaks at step 20 or 40 instead, so selecting by GenEval would have picked an early checkpoint ([plot](https://ptd-website.github.io/rdm-website/#selection)).
 
 **W2. Does the PickScore result depend on the scorer used in curation?** **No: HPSv2.1 and ImageReward, which our pipeline never uses, measure the same gains.** On 500 COCO-val captions, 4 images each:
 
@@ -111,6 +111,6 @@ Most of it is the 24-fold oversampling for PickScore top-3; a reference of rando
 
 We will add both DMD2 runs with their full curves to App. H.2.
 
-**W4. Claims.** (i) *Controller.* §1 will describe the controller by what the ablation measures: it reallocates weight to the worst-matched encoder, cutting that ratio from 5.06 to 3.39 (uniform weighting 4.75), and PickScore, HPSv2.1 and ImageReward prefer it in every seed. (ii) *Scope.* All large-scale results are post-training results; the abstract and §3.2 will say so, and a new appendix will give the from-scratch evidence, a toy-scale batch sweep. (iii) *Vision-Aided GAN.* Kumari et al. already supervise with frozen pretrained feature ensembles, through trainable adversarial heads and progressive model selection. RDM matches kernel statistics against a frozen full-data reference, with no adversary or trainable head, and weights encoders by a constrained controller. We will rewrite §2 and §3.3 accordingly and add Stein et al. and Morozov et al.
+**W4. Claims.** (i) *Controller.* §1 will describe the controller by what the ablation measures: it reallocates weight to the worst-matched encoder, cutting that ratio from 5.06 to 3.38 (uniform weighting 4.75), and PickScore, HPSv2.1 and ImageReward prefer it in every seed. (ii) *Scope.* All large-scale results are post-training results; the abstract and §3.2 will say so, and a new appendix will give the from-scratch evidence, a toy-scale batch sweep. (iii) *Vision-Aided GAN.* Kumari et al. already supervise with frozen pretrained feature ensembles, through trainable adversarial heads and progressive model selection. RDM matches kernel statistics against a frozen full-data reference, with no adversary or trainable head, and weights encoders by a constrained controller. We will rewrite §2 and §3.3 accordingly and add Stein et al. and Morozov et al.
 
 ---

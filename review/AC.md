@@ -2,7 +2,7 @@
 
 ## AC
 
-*Post as: Official Comment on the forum, to all reviewers and the AC (post first). 3,425 / 5,000 characters.*
+*Post as: Official Comment on the forum, to all reviewers and the AC (post first). 3,434 / 5,000 characters.*
 
 **Title:** Summary for the AC: new evidence on evaluation, FID, scope and text-to-image
 
@@ -14,7 +14,7 @@ We thank the reviewers. The reviews ask for evaluation evidence that does not sh
 * Five encoders from families absent from training split: iRDM leads on I-JEPA and SAM, FD-SIM on three SSL encoders that track Inception statistics. A controlled ablation traces the split to the gated controller.
 * Held-out metrics were never used for tuning or checkpoint selection.
 
-**FID (4DFN-W2, mtSD-Q2).** iRDM is 17th of 18 on FID and **2nd of 15 on FD_DINOv2, ahead of every multi-step model**. **FID is a poor optimisation target here**: the two FD-trained models score below real training images; the lowest-FID model is preferred to its own base by none of the three preference models; iRDM has a worse FID than all three pMF-H models, yet all three preference models prefer it to each of them; and our controller drops FID's Inception-v3 encoder from training once it reaches the real level. The revised paper will report FID for every Table 1 generator.
+**FID (4DFN-W2, mtSD-Q2).** iRDM is 17th of 18 on FID and **2nd of 15 on FD_DINOv2, ahead of every multi-step model**. **FID is a poor optimisation target here**: the two FD-trained models score below real training images; the lowest-FID model is at chance or below against its own base under all three preference models; iRDM has a worse FID than all three pMF-H models, yet all three preference models prefer it to each of them; and our controller drops FID's Inception-v3 encoder from training once it reaches the real level. The revised paper will report FID for every Table 1 generator.
 
 **Scope (4DFN-W1, mBiS-W4).** **The batch optimum above 2048 is a post-training result**. A from-scratch sweep shows that iRDM's estimator works at every batch size from 16 to 1024. The revised paper will state the scope of each design choice.
 
